@@ -51,7 +51,7 @@ io.on('connection', function (Socket) {
       Message   : "Login Success"
     });
     // echo globally (all clients) that a person has connected
-    console.log("UserJoin");
+    console.log("UserJoin : "+Socket.UserName);
     Socket.broadcast.emit('UserJoin', {
       UserName: Socket.UserName,
       NumUsers: NumUsers
@@ -60,6 +60,7 @@ io.on('connection', function (Socket) {
 
   // when the client emits 'typing', we broadcast it to others
   Socket.on('Typing', function () {
+    console.log("User Typing : "+Socket.UserName);
     Socket.broadcast.emit('Typing', {
       UserName: Socket.UserName
     });
@@ -67,6 +68,7 @@ io.on('connection', function (Socket) {
 
   // when the client emits 'stop typing', we broadcast it to others
   Socket.on('StopTyping', function () {
+    console.log("User Stop Typing : "+Socket.UserName);
     Socket.broadcast.emit('StopTyping', {
       UserName: Socket.UserName
     });
@@ -74,6 +76,7 @@ io.on('connection', function (Socket) {
 
   // when the user disconnects.. perform this
   Socket.on('Disconnect', function () {
+    console.log("User Left : "+Socket.UserName);
     // remove the UserName from global UserNames list
     if (AddedUser) {
       delete UserNames[Socket.UserName];

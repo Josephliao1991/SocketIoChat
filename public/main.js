@@ -27,7 +27,7 @@ $(function() {
 
   function addParticipantsMessage (data) {
     var message = '';
-    if (data.numUsers === 1) {
+    if (data.NumUsers === 1) {
       message += "there's 1 participant";
     } else {
       message += "there are " + data.numUsers + " participants";
@@ -242,25 +242,25 @@ $(function() {
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
-  socket.on('user joined', function (data) {
-    log(data.username + ' joined');
+  socket.on('UserJoin', function (data) {
+    log(data.UserName + ' joined');
     addParticipantsMessage(data);
   });
 
   // Whenever the server emits 'user left', log it in the chat body
-  socket.on('user left', function (data) {
-    log(data.username + ' left');
+  socket.on('UserLeft', function (data) {
+    log(data.UserName + ' left');
     addParticipantsMessage(data);
     removeChatTyping(data);
   });
 
   // Whenever the server emits 'typing', show the typing message
-  socket.on('typing', function (data) {
+  socket.on('Typing', function (data) {
     addChatTyping(data);
   });
 
   // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', function (data) {
+  socket.on('StopTyping', function (data) {
     removeChatTyping(data);
   });
 });
