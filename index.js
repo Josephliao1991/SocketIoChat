@@ -2,7 +2,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+var io = require('Socket.io')(server);
 var port = process.env.PORT || 80;
 
 server.listen(port, function () {
@@ -14,68 +14,74 @@ app.use(express.static(__dirname + '/public'));
 
 // Chatroom
 
-// usernames which are currently connected to the chat
-var usernames = {};
-var numUsers = 0;
+// UserNames which are currently connected to the chat
+var UserNames = {};
+var NumUsers = 0;
 
-io.on('connection', function (socket) {
-  var addedUser = false;
+io.on('connection', function (Socket) {
+  var AddedUser = false;
+  Socket.emit('Connect',{
+    Code    : 200,
+    Message : "Connect Success"
+  })
 
   // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
+  Socket.on('Message', function (Data) {
     // we tell the client to execute 'new message'
-    console.log("data: "+data);
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
+    console.log("Data: "+Data);
+    Socket.broadcast.emit('new message', {
+      UserName  : Data.UserName,
+      Message   : Data.Message
     });
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username) {
-    console.log("Add User : "+username);
-    // we store the username in the socket session for this client
-    socket.username = username;
-    // add the client's username to the global list
-    usernames[username] = username;
-    ++numUsers;
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: numUsers
+  Socket.on('Join', function (UserName) {
+    console.log("Join : "+UserName);
+    // we store the UserName in the Socket session for this client
+    Socket.UserName = UserName;
+    // add the client's UserName to the global list
+    UserNames[UserName] = UserName;
+    ++NumUsers;
+    AddedUser = true;
+    Socket.emit('Login', {
+      Code      : 200,
+      NumUsers  : NumUsers,
+      Message   : "Login Success"
     });
     // echo globally (all clients) that a person has connected
-    console.log("User Join");
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
+    console.log("UserJoin");
+    Socket.broadcast.emit('UserJoin', {
+      UserName: Socket.UserName,
+      NumUsers: NumUsers
     });
   });
 
   // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
+  Socket.on('Typing', function () {
+    Socket.broadcast.emit('Typing', {
+      UserName: Socket.UserName
     });
   });
 
   // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
+  Socket.on('StopTyping', function () {
+    Socket.broadcast.emit('StopTyping', {
+      UserName: Socket.UserName
     });
   });
 
   // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    // remove the username from global usernames list
-    if (addedUser) {
-      delete usernames[socket.username];
-      --numUsers;
+  Socket.on('Disconnect', function () {
+    // remove the UserName from global UserNames list
+    if (AddedUser) {
+      delete UserNames[Socket.UserName];
+      --NumUsers;
 
       // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
+      Socket.broadcast.emit('UserLeft', {
+        UserName: Socket.UserName,
+        NumUsers: NumUsers
       });
     }
   });
