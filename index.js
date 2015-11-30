@@ -44,8 +44,8 @@ io.on('connection', function (socket) {
       numUsers: numUsers
     });
     // echo globally (all clients) that a person has connected
+    console.log("User Join");
     socket.broadcast.emit('user joined', {
-      console.log("User Join");
       username: socket.username,
       numUsers: numUsers
     });
