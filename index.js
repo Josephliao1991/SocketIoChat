@@ -20,6 +20,7 @@ var NumUsers = 0;
 
 io.on('connection', function (Socket) {
   var AddedUser = false;
+
   Socket.emit('Connect',{
     Code    : 200,
     Message : "Connect Success"
@@ -29,7 +30,7 @@ io.on('connection', function (Socket) {
   Socket.on('Message', function (Data) {
     // we tell the client to execute 'new message'
     console.log("Data: "+Data);
-    Socket.broadcast.emit('new message', {
+    Socket.broadcast.emit('Message', {
       UserName  : Data.UserName,
       Message   : Data.Message
     });

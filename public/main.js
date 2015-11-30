@@ -90,7 +90,7 @@ $(function() {
     var $messageBodyDiv = $('<span class="messageBody">')
       .text(data.Message);
 
-    var typingClass = data.typing ? 'typing' : '';
+    var typingClass = data.Typing ? 'Typing' : '';
     var $messageDiv = $('<li class="message"/>')
       .data('UserName', data.UserName)
       .addClass(typingClass)
