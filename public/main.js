@@ -58,18 +58,18 @@ $(function() {
     // Prevent markup from being injected into the message
     message = cleanInput(message);
     // if there is a non-empty message and a socket connection
-    // if (message && connected) {
-    //   $inputMessage.val('');
-    //   addChatMessage({
-    //     UserName: username,
-    //     Message: message
-    //   });
+    if (message && connected) {
+      $inputMessage.val('');
+      addChatMessage({
+        UserName: username,
+        Message: message
+      });
       // tell server to execute 'new message' and send along one parameter
       socket.emit('Message', {
         UserName : "username",
         Message  : "message"
       });
-    // }
+    }
   }
 
   // Log a message
@@ -231,6 +231,7 @@ $(function() {
 
   // Whenever the server emits 'login', log the login message
   socket.on('Login', function (data) {
+    socket.emit('Message',"SSSS")
     connected = true;
     // Display the welcome message
     var message = "Welcome to Socket.IO Chat – ";
