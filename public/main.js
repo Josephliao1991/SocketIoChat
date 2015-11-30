@@ -48,6 +48,7 @@ $(function() {
 
       // Tell the server your username
       socket.emit('Join', username);
+      socket.emit('Message', "HAHA")
     }
   }
 
@@ -238,6 +239,7 @@ $(function() {
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('Message', function (data) {
+    console.log("Get Message");
     addChatMessage(data);
   });
 
