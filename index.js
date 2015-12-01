@@ -75,7 +75,7 @@ io.on('connection', function (Socket) {
   });
 
   // when the user disconnects.. perform this
-  Socket.on('Disconnect', function () {
+  Socket.on('disconnect', function () {
     console.log("User Left : "+Socket.UserName);
     // remove the UserName from global UserNames list
     if (AddedUser) {
