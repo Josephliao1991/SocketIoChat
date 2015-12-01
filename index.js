@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 8080;
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
@@ -37,12 +37,12 @@ io.on('connection', function (Socket) {
   });
 
   // when the client emits 'add user', this listens and executes
-  Socket.on('Join', function (UserName) {
-    console.log("Join : "+UserName);
+  Socket.on('Join', function (Data) {
+    console.log("Join : "+Data.UserName);
     // we store the UserName in the Socket session for this client
-    Socket.UserName = UserName;
+    Socket.UserName = Data.UserName;
     // add the client's UserName to the global list
-    UserNames[UserName] = UserName;
+    UserNames[UserName] = Data.UserName;
     ++NumUsers;
     AddedUser = true;
     Socket.emit('Login', {
