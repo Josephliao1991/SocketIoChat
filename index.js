@@ -30,9 +30,13 @@ io.on('connection', function (Socket) {
   Socket.on('Message', function (Data) {
     // we tell the client to execute 'new message'
     console.log("Data: "+Data);
+    var SendMessage = Data.Message
+    if (Data.Message == "Test Background Connection") {
+      SendMessage = (Data.Message+Date())
+    }
     Socket.broadcast.emit('Message', {
       UserName  : Data.UserName,
-      Message   : Data.Message
+      Message   : SendMessage
     });
   });
 
@@ -76,7 +80,7 @@ io.on('connection', function (Socket) {
 
   // when the user disconnects.. perform this
   Socket.on('disconnect', function () {
-    console.log("User Left : "+Socket.UserName);
+    console.log("User Left : "+Socket.UserName +Date());
     // remove the UserName from global UserNames list
     if (AddedUser) {
       delete UserNames[Socket.UserName];
